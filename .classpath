@@ -2,19 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/core"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/rwmidi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/MidiReference"/>
-	<classpathentry kind="lib" path="D:/projects/JavaLib/jVSTwRapper-Release-0.9g/jVSTwRapper-0.9g.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/projects/JavaLib/jVSTwRapper-Release-0.9g/jVSTwRapper-0.9g-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="D:/projects/JavaLib/jVSTwRapper-Release-0.9g/jVSTsYstem-0.9g.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/projects/JavaLib/jVSTwRapper-Release-0.9g/jVSTsYstem-0.9g-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="D:/documents/Processing/Libraries/controlP5/library/controlP5.jar" sourcepath="D:/projects/P5/src"/>
+	<classpathentry kind="lib" path="D:/documents/Processing/Libraries/controlP5/library/controlP5.jar" sourcepath="D:/projects/Java/JavaLib/P5Libs/src"/>
+	<classpathentry kind="lib" path="D:/processing/lib/core.jar" sourcepath="D:/projects/Java/JavaLib/processing-1.0/core/src"/>
+	<classpathentry kind="lib" path="D:/projects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTwRapper-0.9g.jar"/>
+	<classpathentry kind="lib" path="D:/projects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTsYstem-0.9g.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RWMidi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
