@@ -8,7 +8,7 @@ import rwmidi.SyncEvent;
 
 /**
  * A metronome.
- * @author  Dave Briccetti. Modified by gmuller
+ * @author  Dave Briccetti. Heavily modified by gmuller
  */
 public class Metronome{
 
@@ -33,6 +33,7 @@ public class Metronome{
 	 */
 	public void setTempo(int beatsPerMinute) {
 		processTempoChange(beatsPerMinute);
+		System.out.println(timeBetweenBeats);
 	}
 
 	/**
@@ -47,38 +48,29 @@ public class Metronome{
 
 	private Runnable createRunnable() {
 		return new Runnable() {
-
 			public void run() {
-				//final long startTime = System.currentTimeMillis();
-				long wokeLateBy = 0;
-
+				double now;
+				double previousTime = 0;
+				double lag;
+				
 				while (keepPlaying) {
-
-					if (wokeLateBy > 10) {
-						//log.debug("Woke late by " + wokeLateBy);
-					} else {
-
-						golSequencer.processEvents(syncEvent);
-					}
-					//final long currentTimeBeforeSleep = System.currentTimeMillis();
-					//final long currentLag = (currentTimeBeforeSleep - startTime) % timeBetweenBeats;
-					//final long sleepTime = timeBetweenBeats - currentLag;
-					//final long expectedWakeTime = currentTimeBeforeSleep + sleepTime;
+					now = System.nanoTime() * 1.0e-6;
+					golSequencer.processEvents(syncEvent);
 					try {
 						Thread.sleep(timeBetweenBeats);
 					} catch (InterruptedException ex) {
-						//log.debug("Interrupted");
+						System.out.println("Timing mechanism failed delay");
 					}
-					//wokeLateBy = System.currentTimeMillis() - expectedWakeTime;
-					//channel.noteOff(noteForThisBeat);
+					lag = (now - previousTime) - timeBetweenBeats;
+					if (lag > 2) System.out.println(lag);
+					previousTime = now;
 				}
-				//log.debug("Thread ending");
 			}
 		};
 	}
 
 	private void processTempoChange(int beatsPerMinute) {
-		timeBetweenBeats = (1000 * 60 / beatsPerMinute) / (24);
+		timeBetweenBeats = (long)((1000.0 * 60 / beatsPerMinute) / (24));
 		restartAtEndOfBeatIfRunning();
 	}
 

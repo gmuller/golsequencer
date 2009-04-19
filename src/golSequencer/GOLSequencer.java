@@ -50,7 +50,7 @@ public class GOLSequencer extends PApplet{
 	Textarea settingsArea;
 	String currentSettings;
 	Metronome metronome;
-	private boolean takeScreenShot;
+	//private boolean takeScreenShot;
 
 	public void setup(){
 		size(800, 500);
@@ -275,9 +275,9 @@ public class GOLSequencer extends PApplet{
 		settingsArea.setText(currentSettings);
 	}
 
-	public void keyPressed() {
-		if (key == 's') {
-			takeScreenShot = true;
-		}
-	}
+//	public void keyPressed() {
+//		if (key == 's') {
+//			takeScreenShot = true;
+//		}
+//	}
 }
