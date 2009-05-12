@@ -3,15 +3,34 @@ package golSequencer.sequencerControl;
 import golSequencer.sequencer.SeqMode;
 import golSequencer.sequencer.SeqPreset;
 import golSequencer.sequencer.Sequencer;
+
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
+
 import midiReference.NoteReference;
 import midiReference.ScaleReference;
-import midiReference.TimeBase24;
+import midiReference.TimeBase;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+
+import processing.xml.XMLWriter;
 import rwmidi.MidiOutputDevice;
 import rwmidi.RWMidi;
+import controlP5.Button;
 import controlP5.ControlP5;
 import controlP5.MultiList;
 import controlP5.MultiListButton;
 import controlP5.Textarea;
+
 
 public class ControlSequencer extends Sequencer{
 
@@ -20,7 +39,9 @@ public class ControlSequencer extends Sequencer{
 	private EventListener controlListener;
 	private Textarea settingsArea;
 	private String currentSettings;
-
+	Button save, load;
+	JFileChooser fileChooser;
+	XMLWriter xmlWriter;
 
 	//	TODO: Implement controls for the following:
 	//		cellsize (resolution) - numberBox
@@ -28,6 +49,7 @@ public class ControlSequencer extends Sequencer{
 	public ControlSequencer(Object p, Integer sequencerId, int startX, int startY, boolean standAlone, ControlP5 controlP5) {
 		super(p, sequencerId, startX, startY, standAlone);
 		this.controlP5 = controlP5;
+		fileChooser = new JFileChooser();
 		controlListener = new EventListener(this);
 		int yIncremement = 2;
 		String tab = "Sequencer " + sequencerId;
@@ -35,6 +57,9 @@ public class ControlSequencer extends Sequencer{
 			tab = "default";
 		}
 		for (BoxConstants box : BoxConstants.values()){
+			if (box == BoxConstants.SAVE || box == BoxConstants.LOAD){
+				break;
+			}
 			if (box.getType() == "toggle"){
 				boolean status = true;
 				switch (box){
@@ -65,8 +90,19 @@ public class ControlSequencer extends Sequencer{
 						SliderConstants.VELOCITY.getLabel());
 		controlP5.controller(createName(SliderConstants.VELOCITY.name())).addListener(controlListener);
 		controlP5.controller(createName(SliderConstants.VELOCITY.name())).setTab(tab);
+		
+		save = controlP5.addButton(createName(BoxConstants.SAVE.name()), 10, 10, 175, 38, 15);
+		save.setTab(tab);
+		save.setLabel(" Save");
+		save.addListener(controlListener);
+		
+		load = controlP5.addButton(createName(BoxConstants.LOAD.name()), 10, 70, 175, 38, 15);
+		load.setTab(tab);
+		load.setLabel(" Load");
+		load.addListener(controlListener);
+		
 
-		sequencerList = controlP5.addMultiList("SequencerList" + sequencerId, 10, 170, 145, 12);
+		sequencerList = controlP5.addMultiList("SequencerList" + sequencerId, 10, 210, 145, 12);
 
 		MultiListButton sequencerItem = sequencerList.add("Sequencer " + sequencerId + " Settings", sequencerId);
 
@@ -116,14 +152,14 @@ public class ControlSequencer extends Sequencer{
 				break;
 			case STEP_SIZE_LIST:
 				i=0;
-				for (TimeBase24 timeBase : TimeBase24.values()) {
+				for (TimeBase timeBase : TimeBase.values()) {
 					createListButton(i, timeBase.name(), i, thisList, ListButtonConstants.STEPSIZE);
 					i++;
 				}
 				break;
 			case UPDATE_INTERVAL_LIST:
 				i=0;
-				for (TimeBase24 timeBase : TimeBase24.values()) {
+				for (TimeBase timeBase : TimeBase.values()) {
 					createListButton(i, timeBase.name(), i, thisList, ListButtonConstants.UPDATEINTERVAL);
 					i++;
 				}
@@ -182,6 +218,101 @@ public class ControlSequencer extends Sequencer{
 		thisButton.setLabel(name);
 		thisButton.setId(buttonType.getId());
 		thisButton.setWidth(buttonType.getButtonWidth());
+	}
+	
+	protected void loadConfiguration() throws Exception{
+		FileDialog fd = new FileDialog(getParent().frame, "Load config", FileDialog.LOAD);
+		fd.setVisible(true);
+		fd.setFile("*.xml");
+		fd.setLocation(50, 50);
+		String dir = fd.getDirectory();
+		String fileName = fd.getFile(); 
+		fd.dispose();
+		
+        Document doc = null;
+        SAXBuilder sb = new SAXBuilder();
+
+        try {
+            doc = sb.build(new File(dir+fileName));
+        }
+        catch (JDOMException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        Element root = doc.getRootElement();
+        Element sequencerElement = root.getChild("sequencer");
+        
+        processSequencerConfiguration(sequencerElement);
+        
+	}
+	
+	protected void writeConfiguration(String eventName, int sequencerId) throws Exception{
+		FileDialog fd = new FileDialog(getParent().frame, "Save config", FileDialog.SAVE);
+		fd.setVisible(true);
+		fd.setFile("*.xml");
+		fd.setLocation(50, 50);
+		String dir = fd.getDirectory();
+		String fileName = fd.getFile(); 
+		fd.dispose();
+
+		FileOutputStream file = new FileOutputStream(dir + fileName);
+		Document doc = new Document();
+		XMLOutputter output = new XMLOutputter();
+		output.setFormat(Format.getPrettyFormat());
+		
+		Element root = new Element("sequencers");
+		root.addContent(addSequencerConfig(sequencerId));
+		doc.addContent(root);
+		output.output(doc, file);	
+	}
+	
+	public Element addSequencerConfig(int sequencerId){
+		Element sequencerElement = new Element("sequencer");
+		sequencerElement.setAttribute("id", String.valueOf(sequencerId));
+		createElement(sequencerElement, "active", Boolean.toString(isActive()));
+		createElement(sequencerElement, "killNotes", Boolean.toString(isKillNotes()));
+		createElement(sequencerElement, "columns", Integer.toString(getNumCellsX()));
+		createElement(sequencerElement, "rows", Integer.toString(getNumCellsY()));
+		createElement(sequencerElement, "octave", Integer.toString(getOctave()));
+		createElement(sequencerElement, "range", Integer.toString(getRange()));
+		createElement(sequencerElement, "minVelocity", Integer.toString(getMinVelocity()));
+		createElement(sequencerElement, "maxVelocity", Integer.toString(getMaxVelocity()));
+		createElement(sequencerElement, "channel", Integer.toString(getChannel()));
+		createElement(sequencerElement, "key", getBaseNote().toString());
+		createElement(sequencerElement, "scale", getBaseScale().toString());
+		createElement(sequencerElement, "stepSize", getStepSize().toString());
+		createElement(sequencerElement, "updateTime", getUpdateInterval().toString());
+		createElement(sequencerElement, "drumMap", getDrumMapMode().toString());
+		createElement(sequencerElement, "seqMode", getMode().toString());
+		
+		return sequencerElement;
+	}
+	
+	private void createElement(Element root, String name, String content){
+		root.addContent(new Element(name).addContent(content));
+	}
+	
+	public void processSequencerConfiguration(Element sequencerElement){
+		setActive(Boolean.parseBoolean(sequencerElement.getChildText("active")));
+		setKillNotes(Boolean.parseBoolean(sequencerElement.getChildText("killNotes")));
+		setNumXCells(Integer.parseInt(sequencerElement.getChildText("columns")));
+		setNumYCells(Integer.parseInt(sequencerElement.getChildText("rows")));
+		setOctave(Integer.parseInt(sequencerElement.getChildText("octave")));
+		setRange(Integer.parseInt(sequencerElement.getChildText("range")));
+		setMinVelocity(Integer.parseInt(sequencerElement.getChildText("minVelocity")));
+		setMaxVelocity(Integer.parseInt(sequencerElement.getChildText("maxVelocity")));
+		setChannel(Integer.parseInt(sequencerElement.getChildText("channel")));
+		setBaseNote(NoteReference.valueOf(sequencerElement.getChildText("key")));
+		setBaseScale(ScaleReference.valueOf(sequencerElement.getChildText("scale")));
+		setStepSize(TimeBase.valueOf(sequencerElement.getChildText("stepSize")));
+		setUpdateInterval(TimeBase.valueOf(sequencerElement.getChildText("updateTime")));
+		setDrumMapMode(SeqPreset.valueOf(sequencerElement.getChildText("drumMap")));
+		setMode(SeqMode.valueOf(sequencerElement.getChildText("seqMode")));
+		
+		drawInfo();
 	}
 }
 

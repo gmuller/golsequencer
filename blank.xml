@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequencers>
+  <sequencer id="1">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>1</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+  <sequencer id="2">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>2</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+  <sequencer id="3">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>3</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+  <sequencer id="4">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>4</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+  <sequencer id="5">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>5</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+  <sequencer id="6">
+    <active>true</active>
+    <killNotes>false</killNotes>
+    <columns>32</columns>
+    <rows>32</rows>
+    <octave>3</octave>
+    <range>3</range>
+    <minVelocity>64</minVelocity>
+    <maxVelocity>110</maxVelocity>
+    <channel>6</channel>
+    <key>C</key>
+    <scale>MAJOR</scale>
+    <stepSize>EIGHTH</stepSize>
+    <updateTime>NONE</updateTime>
+    <drumMap>IMPULSE</drumMap>
+    <seqMode>STEP_SEQUENCE</seqMode>
+  </sequencer>
+</sequencers>
+

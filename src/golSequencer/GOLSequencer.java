@@ -5,7 +5,20 @@ package golSequencer;
 import golSequencer.sequencer.Sequencer;
 import golSequencer.sequencerControl.ControlSequencer;
 
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import processing.core.PApplet;
 import rwmidi.MidiInput;
@@ -31,12 +44,11 @@ public class GOLSequencer extends PApplet{
 
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "golSequencer.GOLSequencer" });
-
 	}
 
 	ArrayList<ControlSequencer> sequencers = new ArrayList<ControlSequencer>();
 	ControlP5 controlP5;
-	Button start, stop;
+	Button start, stop, reset, save, load;
 	Numberbox tempo;
 	Radio syncOptions;
 	boolean externalSync = false;
@@ -54,9 +66,18 @@ public class GOLSequencer extends PApplet{
 
 	public void setup(){
 		size(800, 500);
-
 		metronome = new Metronome(this);
 		controlP5 = new ControlP5(this);
+		setupControlP5();
+
+		//Setup Sequencers
+		for (int i = 1; i < 7; i++){
+			sequencers.add(new ControlSequencer(this, i, 340, 50, true, controlP5));
+		}
+	}
+
+	private void setupControlP5() {
+		//Setup Tabs
 		controlP5.tab("default").activateEvent(true).setId(Constants.SEQUENCER1_TAB.id());
 		controlP5.tab("default").setLabel(Constants.SEQUENCER1_TAB.getName());
 		controlP5.tab(Constants.SEQUENCER2_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER2_TAB.id());
@@ -75,7 +96,8 @@ public class GOLSequencer extends PApplet{
 
 		start = controlP5.addButton(" Play", 101, 290, 52, 38, 15);
 		stop = controlP5.addButton(" Stop", 102, 290, 97, 38, 15);
-		tempo = controlP5.addNumberbox("Tempo", 120, 290, 137, 38, 14);
+		reset = controlP5.addButton(" Reset", 103, 290, 137, 38, 15);
+		tempo = controlP5.addNumberbox("Tempo", 120, 290, 180, 38, 14);
 
 		optionsList = controlP5.addMultiList(Constants.MIDI_SYNC_LIST.name(), 10, 52, 145, 12);
 		optionsList.setTab(Constants.OPTIONS_TAB.getName());
@@ -90,13 +112,17 @@ public class GOLSequencer extends PApplet{
 			createListButton(deviceName, i, syncList, Constants.MIDI_SYNC_LIST);
 		}
 
-		settingsArea = controlP5.addTextarea("Options", currentSettings, 10, 200,135,100);
+		save = controlP5.addButton(Constants.SAVE_BUTTON.name(), 10, 10, 175, 38, 15);
+		save.setTab(Constants.OPTIONS_TAB.getName());
+		save.setLabel(" Save");
+
+		load = controlP5.addButton(Constants.LOAD_BUTTON.name(), 10, 70, 175, 38, 15);
+		load.setTab(Constants.OPTIONS_TAB.getName());
+		load.setLabel(" Load");
+
+		settingsArea = controlP5.addTextarea("Options", currentSettings, 10, 200, 135,100);
 		settingsArea.setTab(Constants.OPTIONS_TAB.getName());
 		populateText();
-
-		for (int i = 1; i < 7; i++){
-			sequencers.add(new ControlSequencer(this, i, 340, 50, true, controlP5));
-		}
 	}
 
 	public void draw(){
@@ -113,11 +139,11 @@ public class GOLSequencer extends PApplet{
 		case SEQUENCER5_TAB: processSequencer(sequencers.get(4)); break;
 		case SEQUENCER6_TAB: processSequencer(sequencers.get(5)); break;
 		}
-		
-//		if (takeScreenShot){
-//			controlP5.draw();
-//			saveFrame("screenshot.png");
-//		}
+
+		//		if (takeScreenShot){
+		//			controlP5.draw();
+		//			saveFrame("screenshot.png");
+		//		}
 	}
 
 	public void processSequencer(Sequencer sequencer){
@@ -139,7 +165,7 @@ public class GOLSequencer extends PApplet{
 			for (Sequencer sequencer : sequencers){
 				sequencer.handleTiming(pulseCount);
 			}
-			if (pulseCount == 96) pulseCount = 0;
+			//if (pulseCount == 384) pulseCount = 0;
 			break;
 		case SyncEvent.START: gameStarted = true; 
 		for (Sequencer sequencer : sequencers){
@@ -148,12 +174,16 @@ public class GOLSequencer extends PApplet{
 		break;
 		case SyncEvent.STOP: gameStarted = false; break;
 		case SyncEvent.SONG_POSITION_POINTER:
-			for (Sequencer sequencer : sequencers){
-				sequencer.setXStep(0);
-				sequencer.setYStep(0);
-				pulseCount = 0;
-			}
+			resetSequencers();
 			break;
+		}
+	}
+
+	private void resetSequencers(){
+		for (Sequencer sequencer : sequencers){
+			sequencer.setXStep(0);
+			sequencer.setYStep(0);
+			pulseCount = 0;
 		}
 	}
 
@@ -175,50 +205,59 @@ public class GOLSequencer extends PApplet{
 			return;
 		}
 
-		String[] theEventName = theEvent.name().split(":");
+		String[] splitEventName = theEvent.name().split(":");
+		String eventName = splitEventName[0];
 		int value = (int) theEvent.controller().value();
 
 		if (theEvent.controller().parent().id() == Constants.OPTIONS_TAB.id()){
-			Constants constant = Constants.valueOf(theEventName[0]);		
+			Constants constant = Constants.valueOf(eventName);		
 			switch (constant){
 			case MIDI_SYNC_LIST:
 				if (externalSync){
-				syncIn.closeMidi();
-				syncIn =  RWMidi.getInputDevices()[value].createInput();
+					syncIn.closeMidi();
+					syncIn =  RWMidi.getInputDevices()[value].createInput(48);
 					if (syncIn != null){
 						syncIn.plug(this, "processEvents");
 					}
 				}
 				break;
+			case SAVE_BUTTON: saveGlobalConfig(); break;
+			case LOAD_BUTTON: loadGlobalConfig(); break;
 			}
 			populateText();
 		}
 
-		if (theEventName[0].contains("Tempo")){
+		if (eventName.contains("Tempo")){
 			metronome.setTempo(handleEvent(theEvent, 220, 40));
 		}
 
 		if (!externalSync){
-			if (theEventName[0].contains("Play")){
+			if (eventName.contains("Play")){
 				if (!metronome.isRunning()){
 					metronome.startThread();
 					metronome.setRunning(true);
 				}
 			}
 
-			if (theEventName[0].contains("Stop")){
+			if (eventName.contains("Stop")){
 				if (metronome.isRunning()){
 					metronome.stop();
 					metronome.setRunning(false);
 				}
 			}
+
+			if (eventName.contains("Reset")){
+				resetSequencers();
+			}
 		}
 	}
+
 
 	public void moveControls(String tabName){
 		tempo.moveTo(tabName);
 		start.moveTo(tabName);
 		stop.moveTo(tabName);
+		reset.moveTo(tabName);
 	}
 
 	private Integer handleEvent(ControlEvent theEvent, int highValue, int lowValue){
@@ -245,7 +284,7 @@ public class GOLSequencer extends PApplet{
 				metronome.stop();
 			}
 			externalSync = true; 
-			syncIn = RWMidi.getInputDevices()[0].createInput();
+			syncIn = RWMidi.getInputDevices()[0].createInput(48);
 			if (syncIn != null){
 				syncIn.plug(this, "processEvents");
 			}
@@ -275,9 +314,70 @@ public class GOLSequencer extends PApplet{
 		settingsArea.setText(currentSettings);
 	}
 
-//	public void keyPressed() {
-//		if (key == 's') {
-//			takeScreenShot = true;
-//		}
-//	}
+	public void saveGlobalConfig(){
+		FileDialog fd = new FileDialog(this.frame, "Save config", FileDialog.SAVE);
+		fd.setVisible(true);
+		String dir = fd.getDirectory();
+		String fileName = fd.getFile(); 
+		fd.dispose();
+
+		FileOutputStream file = null;
+		try {
+			file = new FileOutputStream(dir + fileName);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Document doc = new Document();
+		XMLOutputter output = new XMLOutputter();
+		output.setFormat(Format.getPrettyFormat());
+
+		Element root = new Element("sequencers");
+		for (int i = 0; i < 6; i++){
+			root.addContent(sequencers.get(i).addSequencerConfig(i+1));
+		}
+
+		doc.addContent(root);
+		try {
+			output.output(doc, file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void loadGlobalConfig(){
+		FileDialog fd = new FileDialog(this.frame, "Load config", FileDialog.LOAD);
+		fd.setVisible(true);
+		String dir = fd.getDirectory();
+		String fileName = fd.getFile(); 
+		fd.dispose();
+		
+        Document doc = null;
+        SAXBuilder sb = new SAXBuilder();
+
+        try {
+            doc = sb.build(new File(dir+fileName));
+        }
+        catch (JDOMException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        Element root = doc.getRootElement();
+        List<Element> allSequencers = root.getChildren("sequencer");
+        
+        for (int i = 0; i < 6; i++){
+        	sequencers.get(i).processSequencerConfiguration(allSequencers.get(i));
+        }
+	}
+
+	//	public void keyPressed() {
+	//		if (key == 's') {
+	//			takeScreenShot = true;
+	//		}
+	//	}
 }

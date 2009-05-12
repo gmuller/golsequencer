@@ -13,7 +13,9 @@ public enum Constants {
 	SEQUENCER3_TAB ("Sequencer 3", 2003),
 	SEQUENCER4_TAB ("Sequencer 4", 2004),
 	SEQUENCER5_TAB ("Sequencer 5", 2005),
-	SEQUENCER6_TAB ("Sequencer 6", 2006);
+	SEQUENCER6_TAB ("Sequencer 6", 2006),
+	SAVE_BUTTON ("Save", 3001),
+	LOAD_BUTTON ("Load", 3002);
 	
 	private static final Map<Integer,Constants> lookup 
     = new HashMap<Integer,Constants>();

@@ -6,7 +6,7 @@ import java.util.Map;
 import midiReference.MidiReference;
 import midiReference.NoteReference;
 import midiReference.ScaleReference;
-import midiReference.TimeBase24;
+import midiReference.TimeBase;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import rwmidi.MidiOutput;
@@ -39,6 +39,7 @@ public class Sequencer {
 	private int stepSize;
 	private int updateInterval;
 	private SeqMode mode;
+	private int conversionValue = 48;
 
 	MidiReference midiReference = MidiReference.getMidiReference();
 	private static Map<Integer, Integer> drumNoteMap = new HashMap<Integer, Integer>();
@@ -76,7 +77,7 @@ public class Sequencer {
 			this.output = RWMidi.getOutputDevices()[0].createOutput();
 		colorValue = parent.color(255, 0, 0, 50);
 
-		stepSize = TimeBase24.EIGHTH.getValue();
+		stepSize = TimeBase.EIGHTH.getValue(conversionValue);
 		updateInterval = 0;
 		mode = SeqMode.STEP_SEQUENCE;
 		numCellsX = 32;
@@ -99,6 +100,7 @@ public class Sequencer {
 		scale = MidiReference.createScale(baseScale, baseNote);
 		numValues = scale.length-1;
 	}
+	
 	public void changeCellState() {
 		int x;
 		int y;
@@ -271,7 +273,7 @@ public class Sequencer {
 	}
 
 	@SuppressWarnings("static-access")
-	int pitchValue(int x, int y) {
+	private int pitchValue(int x, int y) {
 		int returnValue = 0;
 		switch (mode){
 		case ORIGINAL:
@@ -362,12 +364,12 @@ public class Sequencer {
 		yReading = step;
 	}
 
-	public void setStepSize(TimeBase24 timeBase) {
-		this.stepSize = timeBase.getValue();
+	public void setStepSize(TimeBase timeBase) {
+		this.stepSize = timeBase.getValue(conversionValue);
 	}
 
 	public void setChannel(int channel) {
-		this.channel = channel;
+		this.channel = channel - 1;
 	}
 
 	public int getChannel() {
@@ -471,8 +473,8 @@ public class Sequencer {
 		return maxVelocity;
 	}
 
-	public TimeBase24 getStepSize() {
-		return TimeBase24.get(stepSize);
+	public TimeBase getStepSize() {
+		return TimeBase.get(stepSize, conversionValue);
 	}
 
 	public boolean isActive() {
@@ -491,12 +493,12 @@ public class Sequencer {
 		this.killNotes = killNotes;
 	}
 	
-	public TimeBase24 getUpdateInterval() {
-		return TimeBase24.get(updateInterval);
+	public TimeBase getUpdateInterval() {
+		return TimeBase.get(updateInterval, conversionValue);
 	}
 
-	public void setUpdateInterval(int updateInterval) {
-		this.updateInterval = updateInterval;
+	public void setUpdateInterval(TimeBase timeBase) {
+		this.updateInterval = timeBase.getValue(conversionValue);
 	}
 	
 	public int getNumCellsX() {
@@ -505,5 +507,9 @@ public class Sequencer {
 
 	public int getNumCellsY() {
 		return numCellsY;
+	}
+	
+	public PApplet getParent() {
+		return parent;
 	}
 }

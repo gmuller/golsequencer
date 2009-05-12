@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="D:/projects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTwRapper-0.9g.jar"/>
 	<classpathentry kind="lib" path="D:/projects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTsYstem-0.9g.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RWMidi"/>
+	<classpathentry kind="lib" path="D:/projects/Java/JavaLib/jdom-1.1/build/jdom.jar" sourcepath="D:/projects/Java/JavaLib/jdom-1.1/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -8,7 +8,9 @@ public enum BoxConstants {
 	OCTAVE ("octave", "box", 16, 8, 0),
 	RANGE ("range", "box", 17, 3, 1),
 	RANDOM ("Random", "button", 14, 1, 0),
-	CLEAR ("Clear", "button", 14, 1, 0);
+	CLEAR ("Clear", "button", 14, 1, 0),
+	SAVE (" Save", "button", 21, 1, 0),
+	LOAD (" Load", "button", 22, 1, 0);
 	
 	
 	
