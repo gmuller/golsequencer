@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import processing.core.PApplet;
 import rwmidi.MidiInput;
@@ -31,7 +31,7 @@ import controlP5.ControlP5;
 import controlP5.MultiList;
 import controlP5.MultiListButton;
 import controlP5.Numberbox;
-import controlP5.Radio;
+import controlP5.RadioButton;
 import controlP5.Textarea;
 
 public class GOLSequencer extends PApplet{
@@ -50,7 +50,7 @@ public class GOLSequencer extends PApplet{
 	ControlP5 controlP5;
 	Button start, stop, reset, save, load;
 	Numberbox tempo;
-	Radio syncOptions;
+	RadioButton syncOptions;
 	boolean externalSync = false;
 	Textarea versionBox;
 	static final String versionBoxString = "Game of Life Sequencer Bank Beta";
@@ -78,14 +78,14 @@ public class GOLSequencer extends PApplet{
 
 	private void setupControlP5() {
 		//Setup Tabs
-		controlP5.tab("default").activateEvent(true).setId(Constants.SEQUENCER1_TAB.id());
-		controlP5.tab("default").setLabel(Constants.SEQUENCER1_TAB.getName());
-		controlP5.tab(Constants.SEQUENCER2_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER2_TAB.id());
-		controlP5.tab(Constants.SEQUENCER3_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER3_TAB.id());
-		controlP5.tab(Constants.SEQUENCER4_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER4_TAB.id());
-		controlP5.tab(Constants.SEQUENCER5_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER5_TAB.id());
-		controlP5.tab(Constants.SEQUENCER6_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER6_TAB.id());
-		controlP5.tab(Constants.OPTIONS_TAB.getName()).activateEvent(true).setId(Constants.OPTIONS_TAB.id());
+		controlP5.getTab("default").activateEvent(true).setId(Constants.SEQUENCER1_TAB.id());
+		controlP5.getTab("default").setLabel(Constants.SEQUENCER1_TAB.getName());
+		controlP5.getTab(Constants.SEQUENCER2_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER2_TAB.id());
+		controlP5.getTab(Constants.SEQUENCER3_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER3_TAB.id());
+		controlP5.getTab(Constants.SEQUENCER4_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER4_TAB.id());
+		controlP5.getTab(Constants.SEQUENCER5_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER5_TAB.id());
+		controlP5.getTab(Constants.SEQUENCER6_TAB.getName()).activateEvent(true).setId(Constants.SEQUENCER6_TAB.id());
+		controlP5.getTab(Constants.OPTIONS_TAB.getName()).activateEvent(true).setId(Constants.OPTIONS_TAB.id());
 		versionBox = controlP5.addTextarea("VersionBox", versionBoxString, width-165, 3, 200, 15);
 		versionBox.setTab(Constants.OPTIONS_TAB.getName());
 
@@ -114,11 +114,11 @@ public class GOLSequencer extends PApplet{
 
 		save = controlP5.addButton(Constants.SAVE_BUTTON.name(), 10, 10, 175, 38, 15);
 		save.setTab(Constants.OPTIONS_TAB.getName());
-		save.setLabel(" Save");
+		save.setCaptionLabel(" Save");
 
 		load = controlP5.addButton(Constants.LOAD_BUTTON.name(), 10, 70, 175, 38, 15);
 		load.setTab(Constants.OPTIONS_TAB.getName());
-		load.setLabel(" Load");
+		load.setCaptionLabel(" Load");
 
 		settingsArea = controlP5.addTextarea("Options", currentSettings, 10, 200, 135,100);
 		settingsArea.setTab(Constants.OPTIONS_TAB.getName());
@@ -187,9 +187,9 @@ public class GOLSequencer extends PApplet{
 		}
 	}
 
-	void controlEvent(ControlEvent theEvent) {
+	public void controlEvent(ControlEvent theEvent) {
 		if (theEvent.isTab()) {
-			currentTab =  Constants.get(theEvent.tab().id());
+			currentTab =  Constants.get(theEvent.getTab().getId());
 			if (currentTab != Constants.OPTIONS_TAB){
 				if(currentTab != Constants.SEQUENCER1_TAB){
 					moveControls(currentTab.getName());
@@ -200,16 +200,11 @@ public class GOLSequencer extends PApplet{
 			return;
 		}
 
-		if (theEvent.controller().getClass() == controlP5.Radio.class){
-			//handling elsewhere
-			return;
-		}
-
-		String[] splitEventName = theEvent.name().split(":");
+		String[] splitEventName = theEvent.getName().split(":");
 		String eventName = splitEventName[0];
-		int value = (int) theEvent.controller().value();
+		int value = (int) theEvent.getController().getValue();
 
-		if (theEvent.controller().parent().id() == Constants.OPTIONS_TAB.id()){
+		if (theEvent.getController().getParent().getId() == Constants.OPTIONS_TAB.id()){
 			Constants constant = Constants.valueOf(eventName);		
 			switch (constant){
 			case MIDI_SYNC_LIST:
@@ -261,12 +256,12 @@ public class GOLSequencer extends PApplet{
 	}
 
 	private Integer handleEvent(ControlEvent theEvent, int highValue, int lowValue){
-		int value = (int) theEvent.value();
+		int value = (int) theEvent.getValue();
 		if(value > highValue){
-			theEvent.controller().setValue(highValue);
+			theEvent.getController().setValue(highValue);
 		}
 		if(value < lowValue){
-			theEvent.controller().setValue(lowValue);
+			theEvent.getController().setValue(lowValue);
 		}
 		return value;
 	}
@@ -296,7 +291,7 @@ public class GOLSequencer extends PApplet{
 	private void createListButton(String name, int id, MultiListButton listTo, Constants constant){
 		MultiListButton thisButton;
 		thisButton = listTo.add(constant.name() + ":" + id, id);
-		thisButton.setLabel(name);
+		thisButton.setCaptionLabel(name);
 	}
 
 	private void populateText() {
@@ -325,7 +320,6 @@ public class GOLSequencer extends PApplet{
 		try {
 			file = new FileOutputStream(dir + fileName);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Document doc = new Document();
@@ -341,12 +335,10 @@ public class GOLSequencer extends PApplet{
 		try {
 			output.output(doc, file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public void loadGlobalConfig(){
 		FileDialog fd = new FileDialog(this.frame, "Load config", FileDialog.LOAD);
 		fd.setVisible(true);

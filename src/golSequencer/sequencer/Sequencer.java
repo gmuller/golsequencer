@@ -3,14 +3,15 @@ package golSequencer.sequencer;
 import java.util.HashMap;
 import java.util.Map;
 
-import midiReference.MidiReference;
-import midiReference.NoteReference;
-import midiReference.ScaleReference;
-import midiReference.TimeBase;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import rwmidi.MidiOutput;
 import rwmidi.RWMidi;
+
+import com.grantmuller.midiReference.MidiReference;
+import com.grantmuller.midiReference.NoteReference;
+import com.grantmuller.midiReference.ScaleReference;
+import com.grantmuller.midiReference.TimeBase;
 
 public class Sequencer {
 

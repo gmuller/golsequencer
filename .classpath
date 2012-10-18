@@ -2,12 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/MidiReference"/>
-	<classpathentry kind="lib" path="D:/documents/Processing/Libraries/controlP5/library/controlP5.jar" sourcepath="D:/projects/Java/JavaLib/P5Libs/src"/>
-	<classpathentry kind="lib" path="D:/development/processing/lib/core.jar" sourcepath="D:/projects/Java/JavaLib/processing-1.0/core/src"/>
-	<classpathentry kind="lib" path="D:/documents/DevProjects/Java/JavaLib/jdom-1.1/build/jdom.jar"/>
-	<classpathentry kind="lib" path="D:/documents/DevProjects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTsYstem-0.9g.jar"/>
-	<classpathentry kind="lib" path="D:/documents/DevProjects/Java/JavaLib/jVSTwRapper-Release-0.9g/jVSTwRapper-0.9g.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/rwmidi-git"/>
+	<classpathentry kind="lib" path="D:/documents/Code/lib/jdom-2.0.2/jdom-2.0.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jmidireference"/>
+	<classpathentry kind="lib" path="D:/documents/Code/rwmidi/jar/rwmidi.jar"/>
+	<classpathentry kind="lib" path="D:/development/processing-2.0b1-windows64/processing-2.0b1/core/library/core.jar"/>
+	<classpathentry kind="lib" path="D:/documents/Processing/Libraries/controlP5/library/controlP5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

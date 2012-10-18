@@ -11,20 +11,20 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
-import midiReference.NoteReference;
-import midiReference.ScaleReference;
-import midiReference.TimeBase;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-
-import processing.xml.XMLWriter;
 import rwmidi.MidiOutputDevice;
 import rwmidi.RWMidi;
+
+import com.grantmuller.midiReference.NoteReference;
+import com.grantmuller.midiReference.ScaleReference;
+import com.grantmuller.midiReference.TimeBase;
+
 import controlP5.Button;
 import controlP5.ControlP5;
 import controlP5.MultiList;
@@ -41,7 +41,6 @@ public class ControlSequencer extends Sequencer{
 	private String currentSettings;
 	Button save, load;
 	JFileChooser fileChooser;
-	XMLWriter xmlWriter;
 
 	//	TODO: Implement controls for the following:
 	//		cellsize (resolution) - numberBox

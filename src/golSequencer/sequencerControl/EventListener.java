@@ -2,12 +2,13 @@ package golSequencer.sequencerControl;
 
 import golSequencer.sequencer.SeqMode;
 import golSequencer.sequencer.SeqPreset;
-import midiReference.NoteReference;
-import midiReference.ScaleReference;
-import midiReference.TimeBase;
-import processing.xml.XMLWriter;
 import rwmidi.MidiOutput;
 import rwmidi.RWMidi;
+
+import com.grantmuller.midiReference.NoteReference;
+import com.grantmuller.midiReference.ScaleReference;
+import com.grantmuller.midiReference.TimeBase;
+
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
 import controlP5.Range;
@@ -15,20 +16,17 @@ import controlP5.Range;
 public class EventListener implements ControlListener {
 	int value;
 	ControlSequencer sequencer;
-	XMLWriter xmlWriter;
-
-
 	EventListener(ControlSequencer sequencer){
 		this.sequencer = sequencer;
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
 
-		String[] splitEventName = theEvent.name().split(":");
+		String[] splitEventName = theEvent.getName().split(":");
 		String eventName = splitEventName[0];
 		int sequencerId = Integer.parseInt(splitEventName[1]);
 
-		if (theEvent.controller().getClass() == controlP5.Numberbox.class){
+		if (theEvent.getController().getClass() == controlP5.Numberbox.class){
 			BoxConstants boxConstant = BoxConstants.valueOf(eventName);
 
 			switch (boxConstant){
@@ -39,10 +37,10 @@ public class EventListener implements ControlListener {
 			}
 		}
 
-		if (theEvent.controller().getClass() == controlP5.MultiListButton.class){
+		if (theEvent.getController().getClass() == controlP5.MultiListButton.class){
 			ListButtonConstants buttonConstant = ListButtonConstants.valueOf(eventName);
-			int value = (int) theEvent.controller().value();
-			String label = theEvent.controller().label();
+			int value = (int) theEvent.getController().getValue();
+			String label = theEvent.getController().getCaptionLabel().toString();
 			switch (buttonConstant){
 			case MIDIOUT:
 				MidiOutput midiOut = RWMidi.getOutputDevices()[value].createOutput();
@@ -61,11 +59,11 @@ public class EventListener implements ControlListener {
 			sequencer.drawInfo();
 		}		
 
-		if (theEvent.controller().getClass() == controlP5.Range.class){
+		if (theEvent.getController().getClass() == controlP5.Range.class){
 			SliderConstants sliderConstant = SliderConstants.valueOf(eventName);
-			Range range = (Range) theEvent.controller();
-			int highValue = (int) range.highValue();
-			int lowValue = (int) range.lowValue();
+			Range range = (Range) theEvent.getController();
+			int highValue = (int) range.getHighValue();
+			int lowValue = (int) range.getLowValue();
 
 			switch (sliderConstant){
 			case VELOCITY: 
@@ -75,22 +73,22 @@ public class EventListener implements ControlListener {
 			}
 		}
 
-		if (theEvent.controller().getClass() == controlP5.Button.class ||
-				theEvent.controller().getClass() == controlP5.Toggle.class){
+		if (theEvent.getController().getClass() == controlP5.Button.class ||
+				theEvent.getController().getClass() == controlP5.Toggle.class){
 			BoxConstants buttonConstant = BoxConstants.valueOf(eventName);
 
 			switch (buttonConstant){
 			case RANDOM: sequencer.randomizeCells(); break;
 			case CLEAR: sequencer.clearCells(); break;
 			case KILLNOTES: 
-				if (theEvent.controller().value() == 0){
+				if (theEvent.getController().getValue() == 0){
 					sequencer.setKillNotes(false);
 				} else {
 					sequencer.setKillNotes(true);
 				}			
 				break;
 			case ACTIVE:
-				if (theEvent.controller().value() == 0){
+				if (theEvent.getController().getValue() == 0){
 					sequencer.setActive(false);
 				} else {
 					sequencer.setActive(true);
@@ -118,12 +116,12 @@ public class EventListener implements ControlListener {
 	}
 
 	private Integer handleEvent(ControlEvent theEvent, BoxConstants boxConstant){
-		value = (int) theEvent.value();
+		value = (int) theEvent.getValue();
 		if(value > boxConstant.getHighValue()){
-			theEvent.controller().setValue(boxConstant.getHighValue());
+			theEvent.getController().setValue(boxConstant.getHighValue());
 		}
 		if(value < boxConstant.getLowValue()){
-			theEvent.controller().setValue(boxConstant.getLowValue());
+			theEvent.getController().setValue(boxConstant.getLowValue());
 		}
 		return value;
 	}
