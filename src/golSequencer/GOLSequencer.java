@@ -189,6 +189,8 @@ public class GOLSequencer extends PApplet{
 	}
 
 	public void controlEvent(ControlEvent theEvent) {
+		if (!theEvent.isController()) return;
+		
 		if (theEvent.isTab()) {
 			currentTab =  Constants.get(theEvent.getTab().getId());
 			if (currentTab != Constants.OPTIONS_TAB){
@@ -203,7 +205,7 @@ public class GOLSequencer extends PApplet{
 
 		String[] splitEventName = theEvent.getName().split(":");
 		String eventName = splitEventName[0];
-		int value = (int) theEvent.getController().getValue();
+		int value = (int) theEvent.getValue();
 
 		if (theEvent.getController().getParent().getId() == Constants.OPTIONS_TAB.id()){
 			Constants constant = Constants.valueOf(eventName);		
@@ -211,7 +213,7 @@ public class GOLSequencer extends PApplet{
 			case MIDI_SYNC_LIST:
 				if (externalSync){
 					syncIn.closeMidi();
-					syncIn =  RWMidi.getInputDevices()[value].createInput(48);
+					syncIn =  RWMidi.getInputDevices()[value].createInput();
 					if (syncIn != null){
 						syncIn.plug(this, "processEvents");
 					}
