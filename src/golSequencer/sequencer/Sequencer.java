@@ -18,7 +18,6 @@ public class Sequencer {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8931646463830193187L;
 	private Integer sequencerId;
 	private boolean active;
 	private boolean standAlone;

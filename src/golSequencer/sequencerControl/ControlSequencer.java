@@ -64,10 +64,17 @@ public class ControlSequencer extends Sequencer{
 				switch (box){
 				case ACTIVE: status = this.isActive();break;
 				case KILLNOTES: status = this.isKillNotes(); break;
+				default: break;
 				}
-				controlP5.addToggle(createName(box.name()), status, startX + 400, startY + yIncremement, 12, 12).setLabel(box.getLabel());
+				controlP5.addToggle(createName(box.name()), status)
+				.setPosition(startX + 400, startY + yIncremement)
+				.setSize(12, 12)
+				.setCaptionLabel(box.getLabel());
 			} else if (box.getType() == "button"){
-				controlP5.addButton(createName(box.name()), 0, startX + 400, startY + yIncremement, 38, 15).setLabel(box.getLabel());
+				controlP5.addButton(createName(box.name()))
+				.setPosition(startX + 400, startY + yIncremement)
+				.setSize(38, 15)
+				.setCaptionLabel(box.getLabel());
 			} else if (box.getType() == "box"){
 				int startValue = 0;
 				switch (box){
@@ -75,31 +82,35 @@ public class ControlSequencer extends Sequencer{
 				case OCTAVE: startValue = this.getOctave(); break;
 				case COLUMNS: startValue = this.getNumCellsX(); break;
 				case ROWS: startValue = this.getNumCellsY(); break;
+				default: startValue = 0;
 				}
-				controlP5.addNumberbox(createName(box.name()), startValue, startX + 400, startY + yIncremement, 30, 14).setLabel(box.getLabel());
+				controlP5.addNumberbox(createName(box.name()), startValue, startX + 400, startY + yIncremement, 30, 14).setCaptionLabel(box.getLabel());
 			}
-			controlP5.controller(createName(box.name())).addListener(controlListener);
-			controlP5.controller(createName(box.name())).setTab(tab);
+			controlP5.getController(createName(box.name())).addListener(controlListener);
+			controlP5.getController(createName(box.name())).setTab(tab);
 			yIncremement+=45;
 		}
-		
+
 		controlP5.addRange(createName(SliderConstants.VELOCITY.name()), SliderConstants.VELOCITY.getLowValue(), 
 				SliderConstants.VELOCITY.getHighValue(), SliderConstants.VELOCITY.getDefaultLowValue(), 
-				SliderConstants.VELOCITY.getDefaultHighValue(), startX + 75, startY + 400, 250, 14).setLabel(
+				SliderConstants.VELOCITY.getDefaultHighValue(), startX + 75, startY + 400, 250, 14).setCaptionLabel(
 						SliderConstants.VELOCITY.getLabel());
-		controlP5.controller(createName(SliderConstants.VELOCITY.name())).addListener(controlListener);
-		controlP5.controller(createName(SliderConstants.VELOCITY.name())).setTab(tab);
-		
-		save = controlP5.addButton(createName(BoxConstants.SAVE.name()), 10, 10, 175, 38, 15);
-		save.setTab(tab);
-		save.setLabel(" Save");
-		save.addListener(controlListener);
-		
-		load = controlP5.addButton(createName(BoxConstants.LOAD.name()), 10, 70, 175, 38, 15);
-		load.setTab(tab);
-		load.setLabel(" Load");
-		load.addListener(controlListener);
-		
+		controlP5.getController(createName(SliderConstants.VELOCITY.name())).addListener(controlListener);
+		controlP5.getController(createName(SliderConstants.VELOCITY.name())).setTab(tab);
+
+		controlP5.addButton(createName(BoxConstants.SAVE.name()))
+		.setPosition(10, 175)
+		.setSize(38, 15)
+		.setTab(tab)
+		.setCaptionLabel(" Save")
+		.addListener(controlListener);
+
+		controlP5.addButton(createName(BoxConstants.LOAD.name()))
+		.setPosition(70, 175)
+		.setSize(38, 15)
+		.setTab(tab)
+		.setCaptionLabel(" Load")
+		.addListener(controlListener);
 
 		sequencerList = controlP5.addMultiList("SequencerList" + sequencerId, 10, 210, 145, 12);
 
@@ -107,7 +118,7 @@ public class ControlSequencer extends Sequencer{
 
 		for (ListConstants listHead : ListConstants.values()){
 			MultiListButton thisList = createList(listHead, sequencerItem);
-			thisList.setLabel(listHead.getLabel());
+			thisList.setCaptionLabel(listHead.getLabel());
 			thisList.setWidth(55);
 
 			switch (listHead){
@@ -214,11 +225,11 @@ public class ControlSequencer extends Sequencer{
 		MultiListButton thisButton;
 		thisButton = listTo.add(createName(buttonType.name() + ":" + incrementer ), id);
 		thisButton.addListener(controlListener);
-		thisButton.setLabel(name);
+		thisButton.setCaptionLabel(name);
 		thisButton.setId(buttonType.getId());
 		thisButton.setWidth(buttonType.getButtonWidth());
 	}
-	
+
 	protected void loadConfiguration() throws Exception{
 		FileDialog fd = new FileDialog(getParent().frame, "Load config", FileDialog.LOAD);
 		fd.setVisible(true);
@@ -227,27 +238,27 @@ public class ControlSequencer extends Sequencer{
 		String dir = fd.getDirectory();
 		String fileName = fd.getFile(); 
 		fd.dispose();
-		
-        Document doc = null;
-        SAXBuilder sb = new SAXBuilder();
 
-        try {
-            doc = sb.build(new File(dir+fileName));
-        }
-        catch (JDOMException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        Element root = doc.getRootElement();
-        Element sequencerElement = root.getChild("sequencer");
-        
-        processSequencerConfiguration(sequencerElement);
-        
+		Document doc = null;
+		SAXBuilder sb = new SAXBuilder();
+
+		try {
+			doc = sb.build(new File(dir+fileName));
+		}
+		catch (JDOMException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Element root = doc.getRootElement();
+		Element sequencerElement = root.getChild("sequencer");
+
+		processSequencerConfiguration(sequencerElement);
+
 	}
-	
+
 	protected void writeConfiguration(String eventName, int sequencerId) throws Exception{
 		FileDialog fd = new FileDialog(getParent().frame, "Save config", FileDialog.SAVE);
 		fd.setVisible(true);
@@ -261,13 +272,13 @@ public class ControlSequencer extends Sequencer{
 		Document doc = new Document();
 		XMLOutputter output = new XMLOutputter();
 		output.setFormat(Format.getPrettyFormat());
-		
+
 		Element root = new Element("sequencers");
 		root.addContent(addSequencerConfig(sequencerId));
 		doc.addContent(root);
 		output.output(doc, file);	
 	}
-	
+
 	public Element addSequencerConfig(int sequencerId){
 		Element sequencerElement = new Element("sequencer");
 		sequencerElement.setAttribute("id", String.valueOf(sequencerId));
@@ -286,14 +297,14 @@ public class ControlSequencer extends Sequencer{
 		createElement(sequencerElement, "updateTime", getUpdateInterval().toString());
 		createElement(sequencerElement, "drumMap", getDrumMapMode().toString());
 		createElement(sequencerElement, "seqMode", getMode().toString());
-		
+
 		return sequencerElement;
 	}
-	
+
 	private void createElement(Element root, String name, String content){
 		root.addContent(new Element(name).addContent(content));
 	}
-	
+
 	public void processSequencerConfiguration(Element sequencerElement){
 		setActive(Boolean.parseBoolean(sequencerElement.getChildText("active")));
 		setKillNotes(Boolean.parseBoolean(sequencerElement.getChildText("killNotes")));
@@ -310,7 +321,7 @@ public class ControlSequencer extends Sequencer{
 		setUpdateInterval(TimeBase.valueOf(sequencerElement.getChildText("updateTime")));
 		setDrumMapMode(SeqPreset.valueOf(sequencerElement.getChildText("drumMap")));
 		setMode(SeqMode.valueOf(sequencerElement.getChildText("seqMode")));
-		
+
 		drawInfo();
 	}
 }

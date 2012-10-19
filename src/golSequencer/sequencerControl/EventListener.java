@@ -34,13 +34,14 @@ public class EventListener implements ControlListener {
 			case ROWS: sequencer.setNumYCells(handleEvent(theEvent, boxConstant)); break;
 			case OCTAVE: sequencer.setOctave(handleEvent(theEvent, boxConstant)); break;
 			case RANGE: sequencer.setRange(handleEvent(theEvent, boxConstant)); break;
+			default: break;
 			}
 		}
 
 		if (theEvent.getController().getClass() == controlP5.MultiListButton.class){
 			ListButtonConstants buttonConstant = ListButtonConstants.valueOf(eventName);
 			int value = (int) theEvent.getController().getValue();
-			String label = theEvent.getController().getCaptionLabel().toString();
+			String label = theEvent.getController().getCaptionLabel().getText();
 			switch (buttonConstant){
 			case MIDIOUT:
 				MidiOutput midiOut = RWMidi.getOutputDevices()[value].createOutput();
@@ -111,6 +112,7 @@ public class EventListener implements ControlListener {
 					e.printStackTrace();
 				}
 				break;
+			default: break;
 			}
 		}
 	}

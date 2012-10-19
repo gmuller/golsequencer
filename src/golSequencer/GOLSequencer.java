@@ -94,9 +94,9 @@ public class GOLSequencer extends PApplet{
 		syncOptions.addItem("external", 101);
 		syncOptions.setTab(Constants.OPTIONS_TAB.getName());
 
-		start = controlP5.addButton(" Play", 101, 290, 52, 38, 15);
-		stop = controlP5.addButton(" Stop", 102, 290, 97, 38, 15);
-		reset = controlP5.addButton(" Reset", 103, 290, 137, 38, 15);
+		start = controlP5.addButton(" Play", 101).setPosition(290, 52).setSize(38, 15);
+		stop = controlP5.addButton(" Stop", 102).setPosition(290, 97).setSize(38, 15);
+		reset = controlP5.addButton(" Reset", 103).setPosition(290, 137).setSize(38, 15);
 		tempo = controlP5.addNumberbox("Tempo", 120, 290, 180, 38, 14);
 
 		optionsList = controlP5.addMultiList(Constants.MIDI_SYNC_LIST.name(), 10, 52, 145, 12);
@@ -112,11 +112,11 @@ public class GOLSequencer extends PApplet{
 			createListButton(deviceName, i, syncList, Constants.MIDI_SYNC_LIST);
 		}
 
-		save = controlP5.addButton(Constants.SAVE_BUTTON.name(), 10, 10, 175, 38, 15);
+		save = controlP5.addButton(Constants.SAVE_BUTTON.name()).setPosition(10, 175).setSize(38, 15);
 		save.setTab(Constants.OPTIONS_TAB.getName());
 		save.setCaptionLabel(" Save");
 
-		load = controlP5.addButton(Constants.LOAD_BUTTON.name(), 10, 70, 175, 38, 15);
+		load = controlP5.addButton(Constants.LOAD_BUTTON.name()).setPosition(70, 175).setSize(38, 15);
 		load.setTab(Constants.OPTIONS_TAB.getName());
 		load.setCaptionLabel(" Load");
 
@@ -138,6 +138,7 @@ public class GOLSequencer extends PApplet{
 		case SEQUENCER4_TAB: processSequencer(sequencers.get(3)); break;
 		case SEQUENCER5_TAB: processSequencer(sequencers.get(4)); break;
 		case SEQUENCER6_TAB: processSequencer(sequencers.get(5)); break;
+		default:break;
 		}
 
 		//		if (takeScreenShot){
@@ -218,6 +219,7 @@ public class GOLSequencer extends PApplet{
 				break;
 			case SAVE_BUTTON: saveGlobalConfig(); break;
 			case LOAD_BUTTON: loadGlobalConfig(); break;
+			default: break;
 			}
 			populateText();
 		}
