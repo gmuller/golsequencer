@@ -10,6 +10,20 @@ Game of Life Sequencer Bank Beta- <a href="http://www.grantmuller.com/wp-content
 
 You can check out the source or report an issue <a href="https://github.com/gmuller/golsequencer/issues">here</a>
 
+## Compile from source
+
+1. `git clone git@github.com:gmuller/golsequencer.git`
+2. `cd golsequencer`
+3. `ant`
+
+## Open in Eclipse
+
+1. Follow the instructions about to compile from source.
+2. In Eclipse Navigate to "File -> New -> Other".
+3. Select "Java Project from Existing Ant Buildfile".
+4. Navigate to .../golsequencer/build.xml
+5. Complete the wizard
+
 ## Documentation
 
 The application is divided into 7 tabs, one tab for each sequencer, and a global options for options affecting all sequencers.
