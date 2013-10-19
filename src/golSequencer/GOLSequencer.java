@@ -42,7 +42,7 @@ public class GOLSequencer extends PApplet{
 	private static final long serialVersionUID = 3033023797726941226L;
 
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		PApplet.main(new String[] { "golSequencer.GOLSequencer" });
 	}
 
@@ -64,6 +64,7 @@ public class GOLSequencer extends PApplet{
 	Metronome metronome;
 	//private boolean takeScreenShot;
 
+	@Override
 	public void setup(){
 		size(800, 500);
 		metronome = new Metronome(this);
@@ -101,32 +102,37 @@ public class GOLSequencer extends PApplet{
 
 		optionsList = controlP5.addMultiList(Constants.MIDI_SYNC_LIST.name(), 10, 52, 145, 12);
 		optionsList.setTab(Constants.OPTIONS_TAB.getName());
-		MultiListButton syncList = optionsList.add("Midi Sync Port", 1000);
+		final MultiListButton syncList = optionsList.add("Midi Sync Port", 1000);
 
-		MidiInputDevice devices[] = RWMidi.getInputDevices();
+		final MidiInputDevice devices[] = RWMidi.getInputDevices();
 		String deviceName;
 		for (int i = 0; i < devices.length; i++) {
 			deviceName = devices[i].getName();
-			if (devices[i].getName().length() > 22)
+			if (devices[i].getName().length() > 22) {
 				deviceName = devices[i].getName().substring(0, 21);
+			}
 			createListButton(deviceName, i, syncList, Constants.MIDI_SYNC_LIST);
 		}
 
-		save = controlP5.addButton(Constants.SAVE_BUTTON.name()).setPosition(10, 175).setSize(38, 15);
-		save.setTab(Constants.OPTIONS_TAB.getName());
-		save.setCaptionLabel(" Save");
+		controlP5.addButton(Constants.SAVE_BUTTON.name())
+		.setPosition(10, 175)
+		.setSize(38, 15)
+		.setTab(Constants.OPTIONS_TAB.getName())
+		.setCaptionLabel(" Save");
 
-		load = controlP5.addButton(Constants.LOAD_BUTTON.name()).setPosition(70, 175).setSize(38, 15);
-		load.setTab(Constants.OPTIONS_TAB.getName());
-		load.setCaptionLabel(" Load");
+		controlP5.addButton(Constants.LOAD_BUTTON.name())
+		.setPosition(70, 175)
+		.setSize(38, 15)
+		.setTab(Constants.OPTIONS_TAB.getName())
+		.setCaptionLabel(" Load");
 
 		settingsArea = controlP5.addTextarea("Options", currentSettings, 10, 200, 135,100);
 		settingsArea.setTab(Constants.OPTIONS_TAB.getName());
 		populateText();
 	}
 
+	@Override
 	public void draw(){
-
 		background(0);
 		fill(0);
 		//stroke(255);
@@ -147,7 +153,7 @@ public class GOLSequencer extends PApplet{
 		//		}
 	}
 
-	public void processSequencer(Sequencer sequencer){
+	public void processSequencer(final Sequencer sequencer){
 		if (mousePressed){
 			sequencer.changeCellState();
 		}
@@ -155,21 +161,21 @@ public class GOLSequencer extends PApplet{
 	}
 
 
-	public void processEvents(SyncEvent syncEvent){
+	public void processEvents(final SyncEvent syncEvent){
 		switch (syncEvent.getStatus()){
 		case SyncEvent.TIMING_CLOCK:
 			pulseCount++;
-			if (pulseCount != 2 && pulseCount % 3 !=0 && pulseCount % 4 != 0) 
+			if (pulseCount != 2 && pulseCount % 3 !=0 && pulseCount % 4 != 0)
 			{
 				break;
 			}
-			for (Sequencer sequencer : sequencers){
+			for (final Sequencer sequencer : sequencers){
 				sequencer.handleTiming(pulseCount);
 			}
 			//if (pulseCount == 384) pulseCount = 0;
 			break;
-		case SyncEvent.START: gameStarted = true; 
-		for (Sequencer sequencer : sequencers){
+		case SyncEvent.START: gameStarted = true;
+		for (final Sequencer sequencer : sequencers){
 			sequencer.handleTiming(pulseCount);
 		}
 		break;
@@ -181,16 +187,14 @@ public class GOLSequencer extends PApplet{
 	}
 
 	private void resetSequencers(){
-		for (Sequencer sequencer : sequencers){
+		for (final Sequencer sequencer : sequencers){
 			sequencer.setXStep(0);
 			sequencer.setYStep(0);
 			pulseCount = 0;
 		}
 	}
 
-	public void controlEvent(ControlEvent theEvent) {
-		if (!theEvent.isController()) return;
-		
+	public void controlEvent(final ControlEvent theEvent) {
 		if (theEvent.isTab()) {
 			currentTab =  Constants.get(theEvent.getTab().getId());
 			if (currentTab != Constants.OPTIONS_TAB){
@@ -203,12 +207,16 @@ public class GOLSequencer extends PApplet{
 			return;
 		}
 
-		String[] splitEventName = theEvent.getName().split(":");
-		String eventName = splitEventName[0];
-		int value = (int) theEvent.getValue();
+		if (!theEvent.isController()) {
+			return;
+		}
+
+		final String[] splitEventName = theEvent.getName().split(":");
+		final String eventName = splitEventName[0];
+		final int value = (int) theEvent.getValue();
 
 		if (theEvent.getController().getParent().getId() == Constants.OPTIONS_TAB.id()){
-			Constants constant = Constants.valueOf(eventName);		
+			final Constants constant = Constants.valueOf(eventName);
 			switch (constant){
 			case MIDI_SYNC_LIST:
 				if (externalSync){
@@ -251,16 +259,15 @@ public class GOLSequencer extends PApplet{
 		}
 	}
 
-
-	public void moveControls(String tabName){
+	public void moveControls(final String tabName){
 		tempo.moveTo(tabName);
 		start.moveTo(tabName);
 		stop.moveTo(tabName);
 		reset.moveTo(tabName);
 	}
 
-	private Integer handleEvent(ControlEvent theEvent, int highValue, int lowValue){
-		int value = (int) theEvent.getValue();
+	private Integer handleEvent(final ControlEvent theEvent, final int highValue, final int lowValue){
+		final int value = (int) theEvent.getValue();
 		if(value > highValue){
 			theEvent.getController().setValue(highValue);
 		}
@@ -270,19 +277,19 @@ public class GOLSequencer extends PApplet{
 		return value;
 	}
 
-	public void radio(int theID){
+	public void radio(final int theID){
 		switch (theID){
-		case 100: 
+		case 100:
 			externalSync = false;
 			if (syncIn != null){
-				syncIn.closeMidi(); 
+				syncIn.closeMidi();
 			}
 			break;
-		case 101: 
+		case 101:
 			if (metronome.isRunning()){
 				metronome.stop();
 			}
-			externalSync = true; 
+			externalSync = true;
 			syncIn = RWMidi.getInputDevices()[0].createInput(48);
 			if (syncIn != null){
 				syncIn.plug(this, "processEvents");
@@ -292,7 +299,7 @@ public class GOLSequencer extends PApplet{
 		}
 	}
 
-	private void createListButton(String name, int id, MultiListButton listTo, Constants constant){
+	private void createListButton(final String name, final int id, final MultiListButton listTo, final Constants constant){
 		MultiListButton thisButton;
 		thisButton = listTo.add(constant.name() + ":" + id, id);
 		thisButton.setCaptionLabel(name);
@@ -306,7 +313,7 @@ public class GOLSequencer extends PApplet{
 				midiInString = midiInString.substring(0, 21);
 			}
 		}
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Midi Sync: " + midiInString.toUpperCase() + "\n");
 
 		currentSettings = buffer.toString();
@@ -314,23 +321,23 @@ public class GOLSequencer extends PApplet{
 	}
 
 	public void saveGlobalConfig(){
-		FileDialog fd = new FileDialog(this.frame, "Save config", FileDialog.SAVE);
+		final FileDialog fd = new FileDialog(frame, "Save config", FileDialog.SAVE);
 		fd.setVisible(true);
-		String dir = fd.getDirectory();
-		String fileName = fd.getFile(); 
+		final String dir = fd.getDirectory();
+		final String fileName = fd.getFile();
 		fd.dispose();
 
 		FileOutputStream file = null;
 		try {
 			file = new FileOutputStream(dir + fileName);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		Document doc = new Document();
-		XMLOutputter output = new XMLOutputter();
+		final Document doc = new Document();
+		final XMLOutputter output = new XMLOutputter();
 		output.setFormat(Format.getPrettyFormat());
 
-		Element root = new Element("sequencers");
+		final Element root = new Element("sequencers");
 		for (int i = 0; i < 6; i++){
 			root.addContent(sequencers.get(i).addSequencerConfig(i+1));
 		}
@@ -338,37 +345,37 @@ public class GOLSequencer extends PApplet{
 		doc.addContent(root);
 		try {
 			output.output(doc, file);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 
 	public void loadGlobalConfig(){
-		FileDialog fd = new FileDialog(this.frame, "Load config", FileDialog.LOAD);
+		final FileDialog fd = new FileDialog(frame, "Load config", FileDialog.LOAD);
 		fd.setVisible(true);
-		String dir = fd.getDirectory();
-		String fileName = fd.getFile(); 
+		final String dir = fd.getDirectory();
+		final String fileName = fd.getFile();
 		fd.dispose();
-		
-        Document doc = null;
-        SAXBuilder sb = new SAXBuilder();
 
-        try {
-            doc = sb.build(new File(dir+fileName));
-        }
-        catch (JDOMException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        Element root = doc.getRootElement();
-        List<Element> allSequencers = root.getChildren("sequencer");
-        
-        for (int i = 0; i < 6; i++){
-        	sequencers.get(i).processSequencerConfiguration(allSequencers.get(i));
-        }
+		Document doc = null;
+		final SAXBuilder sb = new SAXBuilder();
+
+		try {
+			doc = sb.build(new File(dir+fileName));
+		}
+		catch (final JDOMException e) {
+			e.printStackTrace();
+		}
+		catch (final IOException e) {
+			e.printStackTrace();
+		}
+
+		final Element root = doc.getRootElement();
+		final List<Element> allSequencers = root.getChildren("sequencer");
+
+		for (int i = 0; i < 6; i++){
+			sequencers.get(i).processSequencerConfiguration(allSequencers.get(i));
+		}
 	}
 
 	//	public void keyPressed() {

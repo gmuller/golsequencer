@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -40,7 +38,6 @@ public class ControlSequencer extends Sequencer{
 	private Textarea settingsArea;
 	private String currentSettings;
 	Button save, load;
-	JFileChooser fileChooser;
 
 	//	TODO: Implement controls for the following:
 	//		cellsize (resolution) - numberBox
@@ -48,7 +45,6 @@ public class ControlSequencer extends Sequencer{
 	public ControlSequencer(Object p, Integer sequencerId, int startX, int startY, boolean standAlone, ControlP5 controlP5) {
 		super(p, sequencerId, startX, startY, standAlone);
 		this.controlP5 = controlP5;
-		fileChooser = new JFileChooser();
 		controlListener = new EventListener(this);
 		int yIncremement = 2;
 		String tab = "Sequencer " + sequencerId;
