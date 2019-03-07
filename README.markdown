@@ -1,6 +1,6 @@
 The Game of Life Sequencer Bank is based on a game of life sequencer screencast produced by Wesen in 2008. To see the original screencast <a href="http://vimeo.com/1824904">click here</a>. It is a bank of 6 step or drum sequencers that generate patterns based on the basics of Conway's Game of Life cellular automaton. Each sequencer operates independently of the others, and can be configured in a variety of ways.
 
-See the blog [series][1]
+See the blog [series](https://grantmuller.com/series/game-of-life-sequencer-bank/)
 
 The Game of Life Sequencer Bank is written in Java using the Processing, controlP5 and a customized RWMidi library. It should work wherever Java 1.5 is available (Windows, OS X, Linux), though it has only been tested in Windows and Linux. Any problems should be reported here.
 
@@ -129,5 +129,3 @@ The following options apply to all sequencers.
 <dt>Sync Mode</dt> 
 <dd>Selects whether to use internal or external sync.</dd>
 </dl>
-
-[1][https://grantmuller.com/series/game-of-life-sequencer-bank/]
