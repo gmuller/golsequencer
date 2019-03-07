@@ -118,7 +118,7 @@ To the right of the sequencer you have the following options:
 
 ### Options Tab
 
-<img src="http://www.grantmuller.com/wp-content/uploads/screenshot2.gif" alt="screenshot" />
+<img src="https://www.grantmuller.com/wp-content/uploads/screenshot2.gif" alt="screenshot" />
 
 The following options apply to all sequencers.
 
