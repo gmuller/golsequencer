@@ -24,7 +24,7 @@ The application is divided into 7 tabs, one tab for each sequencer, and a global
 
 ### Sequencer Tabs
 
-<img class="alignnone size-full wp-image-563" title="screenshot" src="http://www.grantmuller.com/images/screenshot.gif" alt="screenshot" width="530" height="331" />
+<img class="alignnone size-full wp-image-563" title="screenshot" src="https://www.grantmuller.com/images/screenshot.gif" alt="screenshot" width="530" height="331" />
 
 Under the options readout is a dropdown labeled "Sequencer 1" containing the following options for the sequencer:
 
