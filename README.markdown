@@ -4,12 +4,6 @@ The Game of Life Sequencer Bank is written in Java using the Processing, control
 
 For more info please see the video and example audio at the bottom of the page.
 
-## Download
-
-Game of Life Sequencer Bank Beta- <a href="http://www.grantmuller.com/wp-content/uploads/golseqbank-beta-win.zip">WINDOWS</a> - <a href="http://www.grantmuller.com/wp-content/uploads/golseqbank-beta-osx.zip">OSX</a> - <a href="http://www.grantmuller.com/wp-content/uploads/golseqbank-beta-linux.zip">LINUX</a>
-
-You can check out the source or report an issue <a href="https://github.com/gmuller/golsequencer/issues">here</a>
-
 ## Compile from source
 
 1. `git clone git@github.com:gmuller/golsequencer.git`
@@ -30,7 +24,7 @@ The application is divided into 7 tabs, one tab for each sequencer, and a global
 
 ### Sequencer Tabs
 
-<img class="alignnone size-full wp-image-563" title="screenshot" src="http://www.grantmuller.com/wp-content/uploads/screenshot.gif" alt="screenshot" width="530" height="331" />
+<img class="alignnone size-full wp-image-563" title="screenshot" src="http://www.grantmuller.com/images/screenshot.gif" alt="screenshot" width="530" height="331" />
 
 Under the options readout is a dropdown labeled "Sequencer 1" containing the following options for the sequencer:
 
