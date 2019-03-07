@@ -35,42 +35,42 @@ The application is divided into 7 tabs, one tab for each sequencer, and a global
 Under the options readout is a dropdown labeled "Sequencer 1" containing the following options for the sequencer:
 
 <dl class="dl-horizontal">
-    <dt>Midi Output</dt> 
-    <dd>Sets the MIDI Output that the sequencer will use. If a MIDI port is unavailable for any reason you will not be able to select it.</dd>
+<dt>Midi Output</dt> 
+<dd>Sets the MIDI Output that the sequencer will use. If a MIDI port is unavailable for any reason you will not be able to select it.</dd>
     
-    <dt>Channel</dt> 
-    <dd>Set the MIDI Channel of the sequencer. Options are 1-16.</dd>
+<dt>Channel</dt> 
+<dd>Set the MIDI Channel of the sequencer. Options are 1-16.</dd>
     
-    <dt>Key</dt> 
-    <dd>Sets the key of the sequencer. In SINGLE_NOTE SEQ_MODE this is the only note that will play. This options is ignored in DRUM_SEQUENCE mode.</dd>
+<dt>Key</dt> 
+<dd>Sets the key of the sequencer. In SINGLE_NOTE SEQ_MODE this is the only note that will play. This options is ignored in DRUM_SEQUENCE mode.</dd>
     
-    <dt>Scale</dt> 
-    <dd>The scale/mode from which notes will be selected.</dd>
+<dt>Scale</dt> 
+<dd>The scale/mode from which notes will be selected.</dd>
     
-    <dt>Step Size</dt> 
-    <dd>The size of each step. Values range from 32nd note triplets to Whole Notes.</dd>
+<dt>Step Size</dt> 
+<dd>The size of each step. Values range from 32nd note triplets to Whole Notes.</dd>
     
-    <dt>Update Time</dt> 
-    <dd>Forces the game to update at an interval independent of the sequencer speed. Use this option to generate patterns more quickly. Values range from 32nd note triplets to Whole Notes.</dd>
+<dt>Update Time</dt> 
+<dd>Forces the game to update at an interval independent of the sequencer speed. Use this option to generate patterns more quickly. Values range from 32nd note triplets to Whole Notes.</dd>
     
-    <dt>Drum Map</dt> 
-    <dd>The Drum Map to use. The IMPULSE map uses the note values native the Ableton Live's Impulse drum machine. The ALL_KEYS map starts at C4 and uses each subsequent note until the number of columns is exhausted.</dd>
+<dt>Drum Map</dt> 
+<dd>The Drum Map to use. The IMPULSE map uses the note values native the Ableton Live's Impulse drum machine. The ALL_KEYS map starts at C4 and uses each subsequent note until the number of columns is exhausted.</dd>
     
-    <dt>Seq Mode</dt> 
-    <dd>The mode of the sequencer. Modes are as follows:
-    	<dl>
-    		<dt>DRUM_SEQUENCE</dt> 
-    		<dd>Steps column at a time t the speed selected in the TIME_BASE option. Outputs the note values of the active notes in that column. Notes are selected based on the row and which drum map was used.</dd>
+<dt>Seq Mode</dt> 
+<dd>The mode of the sequencer. Modes are as follows:
+<dl>
+<dt>DRUM_SEQUENCE</dt> 
+<dd>Steps column at a time t the speed selected in the TIME_BASE option. Outputs the note values of the active notes in that column. Notes are selected based on the row and which drum map was used.</dd>
+
+<dt>STEP_SEQUENCE</dt> 
+<dd>Steps cell at a time, left to right top to bottom at the speed selected in the TIME_BASE option. Outputs a midi note for each on cell. Notes are selected based on an algorithm using the key, scale, octave and range.</dd>
     		
-    		<dt>STEP_SEQUENCE</dt> 
-    		<dd>Steps cell at a time, left to right top to bottom at the speed selected in the TIME_BASE option. Outputs a midi note for each on cell. Notes are selected based on an algorithm using the key, scale, octave and range.</dd>
+<dt>ORIGINAL</dt>
+<dd>Outputs not based on the original Wesen setup. The game is updated at the interval selected in the the TIME_BASE option, and outputs are sent for ALL active cells. Best used with monophonic synths.</dd>
     		
-    		<dt>ORIGINAL</dt>
-    		<dd>Outputs not based on the original Wesen setup. The game is updated at the interval selected in the the TIME_BASE option, and outputs are sent for ALL active cells. Best used with monophonic synths.</dd>
-    		
-    		<dt>SINGLE_NOTE</dt> 
-    		<dd>Acts as the step sequencer, but will only output the note selected in the KEY option.</dd>
-    	</dl>
+<dt>SINGLE_NOTE</dt> 
+<dd>Acts as the step sequencer, but will only output the note selected in the KEY option.</dd>
+</dl>
 </dl>
 
 To the left of the sequencer there are several buttons controlling playback.
