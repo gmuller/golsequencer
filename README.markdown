@@ -1,6 +1,6 @@
 The Game of Life Sequencer Bank is based on a game of life sequencer screencast produced by Wesen in 2008. To see the original screencast <a href="http://vimeo.com/1824904">click here</a>. It is a bank of 6 step or drum sequencers that generate patterns based on the basics of Conway's Game of Life cellular automaton. Each sequencer operates independently of the others, and can be configured in a variety of ways.
 
-See the blog [series](https://grantmuller.com/series/game-of-life-sequencer-bank/)
+See the [blog series](https://grantmuller.com/series/game-of-life-sequencer-bank/)
 
 The Game of Life Sequencer Bank is written in Java using the Processing, controlP5 and a customized RWMidi library. It should work wherever Java 1.5 is available (Windows, OS X, Linux), though it has only been tested in Windows and Linux. Any problems should be reported here.
 
@@ -26,7 +26,7 @@ The application is divided into 7 tabs, one tab for each sequencer, and a global
 
 ### Sequencer Tabs
 
-<img class="alignnone size-full wp-image-563" title="screenshot" src="https://www.grantmuller.com/images/screenshot.gif" alt="screenshot" width="530" height="331" />
+<img src="https://www.grantmuller.com/images/screenshot.gif" alt="screenshot" />
 
 Under the options readout is a dropdown labeled "Sequencer 1" containing the following options for the sequencer:
 
@@ -118,7 +118,7 @@ To the right of the sequencer you have the following options:
 
 ### Options Tab
 
-<img class="size-full wp-image-564 alignleft" title="screenshot2" src="http://www.grantmuller.com/wp-content/uploads/screenshot2.gif" alt="screenshot2" width="193" height="248" />
+<img src="http://www.grantmuller.com/wp-content/uploads/screenshot2.gif" alt="screenshot" />
 
 The following options apply to all sequencers.
 
