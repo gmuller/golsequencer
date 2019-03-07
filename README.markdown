@@ -76,48 +76,48 @@ Under the options readout is a dropdown labeled "Sequencer 1" containing the fol
 To the left of the sequencer there are several buttons controlling playback.
 
 <dl>
-    <dt>Play</dt> 
-    <dd>Starts playback of all sequencers.</dd>
+<dt>Play</dt> 
+<dd>Starts playback of all sequencers.</dd>
     
-    <dt>Stop</dt> 
-    <dd>Stops playback of all sequencers.</dd>
+<dt>Stop</dt> 
+<dd>Stops playback of all sequencers.</dd>
     
-    <dt>Tempo</dt> 
-    <dd>Sets the playback tempo of all sequencers</dd>
+<dt>Tempo</dt> 
+<dd>Sets the playback tempo of all sequencers</dd>
 </dl>
 
 To the right of the sequencer you have the following options:
 
 <dl>
-    <dt>Cell Matrix</dt> 
-    <dd>The cell matrix itself is an adjustable 32 x 32 grid of cells that represent on or off states. The game is played in the grid, and the patterns generated are played in various ways depending on the Seq Mode (see Sequencer Options). Clicking on a cell will toggle its on or off state.</dd>
+<dt>Cell Matrix</dt> 
+<dd>The cell matrix itself is an adjustable 32 x 32 grid of cells that represent on or off states. The game is played in the grid, and the patterns generated are played in various ways depending on the Seq Mode (see Sequencer Options). Clicking on a cell will toggle its on or off state.</dd>
     
-    <dt>Active</dt>
-    <dd>Toggle representing the on/off state of the sequencer. A sequencer that is turned off will still step, it will just not output any notes.</dd>
+<dt>Active</dt>
+<dd>Toggle representing the on/off state of the sequencer. A sequencer that is turned off will still step, it will just not output any notes.</dd>
     
-    <dt>Kill Notes</dt> 
-    <dd>When this toggle is activated, only one note will play at a time, the last note that the step sequencer saw as on.</dd>
+<dt>Kill Notes</dt> 
+<dd>When this toggle is activated, only one note will play at a time, the last note that the step sequencer saw as on.</dd>
     
-    <dt>Random</dt> 
-    <dd>This button will generate a random pattern in the cell matrix. Clicking multiple times will turn on additional cells.</dd>
+<dt>Random</dt> 
+<dd>This button will generate a random pattern in the cell matrix. Clicking multiple times will turn on additional cells.</dd>
     
-    <dt>Clear</dt>
-    <dd>This button will clear all cells in the Cell Matrix</dd>
+<dt>Clear</dt>
+<dd>This button will clear all cells in the Cell Matrix</dd>
     
-    <dt>Columns</dt>
+<dt>Columns</dt>
+<ddChange the number of columns in the cell matrix. The maximum number of columns is 32.</dd>
     
-    <ddChange the number of columns in the cell matrix. The maximum number of columns is 32.</dd>
+<dt>Rows</dt>
+<dd>Change the number of rows in the cell matrix. The maximum number of rows is 32.</dd>
     
-    <dt>Rows</dt>
-    <dd>Change the number of rows in the cell matrix. The maximum number of rows is 32.</dd>
+<dt>Octave</dt> 
+<dd>Change the starting octave value of the notes that are generated. Default is 3. Max is 8.</dd>
     
-    <dt>Octave</dt> 
-    <dd>Change the starting octave value of the notes that are generated. Default is 3. Max is 8.</dd>
-    
-    <dt>Range</dt> 
-    <dd>Change the octave range when randomizing notes. Default and maximum are 3.</dd>
-    <dt>Velocity</dt> 
-    <dd>The velocity of generated notes will reside randomly in the range represented by this slider. The slider has two ends so that notes can be created in any velocity range between 0 and 127.</dd>
+<dt>Range</dt> 
+<dd>Change the octave range when randomizing notes. Default and maximum are 3.</dd>
+
+<dt>Velocity</dt> 
+<dd>The velocity of generated notes will reside randomly in the range represented by this slider. The slider has two ends so that notes can be created in any velocity range between 0 and 127.</dd>
 </dl>
 
 ### Options Tab
@@ -127,13 +127,9 @@ To the right of the sequencer you have the following options:
 The following options apply to all sequencers.
 
 <dl>
-    <dt>Midi Sync Port</dt> 
-    <dd>Which port to use for incoming sync. Has no effect if sync mode is set to 'internal'</dd>
+<dt>Midi Sync Port</dt> 
+<dd>Which port to use for incoming sync. Has no effect if sync mode is set to 'internal'</dd>
     
-    <dt>Sync Mode</dt> 
-    <dd>Selects whether to use internal or external sync.</dd>
+<dt>Sync Mode</dt> 
+<dd>Selects whether to use internal or external sync.</dd>
 </dl>
-
-### Known Issues
-
-Performance Problems - its a pretty hefty program, and I'm working on scaling down some of the loops to use fewer cycles. It gets a little better with each release.
